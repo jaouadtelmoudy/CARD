@@ -1,9 +1,9 @@
 <template>  
     <div class="full-width">  
         <form>
-        <input type="text" v-model="newCard.designation" placeholder="Designation..."> 
-        <input type="text" v-model="newCard.prix" placeholder="Prix..."> 
-        <input type="text" v-model="newCard.description" placeholder="Description..." @keyup.enter.prevent="addNewCard(newCard)">         
+        <input type="text" v-model="newCard.designation" placeholder="Designation..." :class="{erreur:erreur}" class="input"><span class="obligatoire">*{{erreur}}</span> 
+        <input type="text" v-model="newCard.prix" placeholder="Prix..." class="input"><span  class="obligatoire">*</span> 
+        <input type="text" v-model="newCard.description" placeholder="Description..." class="input" @keyup.enter.prevent="addNewCard(newCard)"><span  class="obligatoire">*</span>         
         </form>      
     <div class="col-md-3" v-for="(card, i) in cardLists" :key="i">
       <div class="card-view">
@@ -49,13 +49,16 @@ import { mapActions } from 'vuex'
                     dateCreate: "22/10/2018"
                 }
             }
+            
         },        
         computed:{
               ...mapGetters([
-                'getCardList'     
+                'getCardList',
+                'getErreur'     
                ]),
             ...mapState({                  
-                  cardLists: state => state.cardList  
+                  cardLists: state => state.cardList,
+                  erreur:  state => state.erreur
              })          
 
         },
@@ -75,7 +78,13 @@ import { mapActions } from 'vuex'
 @import url(https://fonts.googleapis.com/css?family=Roboto:400,300,500,700);
 @import url(https://fonts.googleapis.com/css?family=Roboto+Slab:400,700);
 
-input { 
+.obligatoire{
+color: red;
+padding-left: 4px;
+
+}
+ 
+.input{ 
     display: inline; 
     width: 30%;
     height: 34px;
@@ -88,6 +97,9 @@ input {
     border: 1px solid #ccc;
     border-radius: 4px;
     margin-left:10px;
+}
+.erreur{
+    border: 1px solid red;
 }
 
 *, *::before, *::after { box-sizing: border-box; -webkit-box-sizing: border-box; }
